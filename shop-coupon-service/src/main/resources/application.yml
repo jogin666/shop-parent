@@ -1,0 +1,41 @@
+# application.properties
+spring:
+  application:
+    name:  dubbo-coupon-provider
+  # Dubbo
+  dubbo:
+    application:
+      id: dubbo-coupon-provider
+      name: dubbo-coupon-provider
+      register:
+        address: zookeeper://127.0.0.1:2181
+    server: true
+    protocol:
+      name: dubbo
+      port: 20881
+
+  # database
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/trade?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: root
+
+# Mybatis properties
+mybatis:
+  type-aliases-package: com.zy.shop.pojo
+  mapper-locations: classpth:mapper/*Mapper.xml
+
+
+# RocketMQ properties
+rocketmq:
+  name-server: 127.0.0.1:9876
+  producer:
+    group: orderProducerGroup
+
+mq:
+  order:
+    consumer:
+      group:
+        name: order_orderTopic_cancel_group
+    topic: orderTopic

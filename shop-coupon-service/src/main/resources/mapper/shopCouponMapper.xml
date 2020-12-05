@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zy.shop.conpon.application.mapper.ShopCouponMapper">
+
+    <select id="findOneById" resultType="ShopCoupon" parameterType="long">
+        select * from myshop.shop_coupon where coupon_id =#{conponId}
+    </select>
+
+    <update id="updateCoupon" parameterType="ShopCoupon">
+        update myshop.shop_coupon set status=#{status},update_time=now(),use_time=#{useTime}
+    </update>
+
+</mapper>
