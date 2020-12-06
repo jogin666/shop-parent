@@ -37,5 +37,13 @@ public class ShopOrderRequest implements Serializable {
 
     private BigDecimal totalMoney;
 
+    private Long goodsId;
+
+    private BigDecimal goodsPrice;
+
+    private BigDecimal couponMoney;
+
+    private BigDecimal moneyPaid;
+
     private String address;
 }

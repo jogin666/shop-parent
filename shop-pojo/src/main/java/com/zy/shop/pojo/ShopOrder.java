@@ -20,6 +20,8 @@ public class ShopOrder implements Serializable {
 
     private Long payId;
 
+    private Long goodsId;
+
     private Long couponId;
 
     private String userName;
@@ -33,6 +35,12 @@ public class ShopOrder implements Serializable {
     private Timestamp updateTime;
 
     private Integer goodsNumber;
+
+    private BigDecimal goodsPrice;
+
+    private BigDecimal couponMoney;
+
+    private BigDecimal moneyPaid;
 
     private BigDecimal totalMoney;
 

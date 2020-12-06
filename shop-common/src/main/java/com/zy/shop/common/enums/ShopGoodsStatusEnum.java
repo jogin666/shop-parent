@@ -14,6 +14,7 @@ public enum ShopGoodsStatusEnum {
     SHOP_GOOD_STATUS_NUMBER_REDUCING(104, "商品库存扣减中"),
     SHOP_GOOD_STATUS_REDUCE_SUCCESS(102, "商品库存扣成功"),
     SHOP_GOOD_STATUS_REDUCE_FAIL(103, "商品库存扣失败"),
+    SHOP_GOOD_STATUS_PRICE_INVALID(104, "商品价格有误"),
     ;
 
     private Integer code;

@@ -77,7 +77,7 @@ public class UserServiceImpl implements IUserService {
             log.info("用户支付订单 - reids 加锁成功,key：{}", userMoneyLog.getOrderId());
             ShopUser shopUser = userMapper.findOneById(userMoneyLog.getUserId());
             // 扣减余额
-            if (userMoneyLog.getType().intValue() == SHOP_PAY_STATUS_PAID.getCode()) {
+            if (userMoneyLog.getType().intValue() == SHOP_PAY_STATUS_UNPAID.getCode()) {
                 reduceUserMoney(userMoneyLog, shopUser);
                 log.info("用户支付订单金额成功，支付金额：{}", (-userMoneyLog.getMoney().intValue()));
             }
@@ -113,7 +113,7 @@ public class UserServiceImpl implements IUserService {
         // 记录当订单操作
         userMoneyLog.setCreateTime(new Timestamp(new Date().getTime()));
         userMoneyLogMapper.saveUseMoneyLog(userMoneyLog);
-        redisTemplate.opsForValue().set(userMoneyLog.getOrderId(), SHOP_PAY_STATUS_UNPAID.getCode());
+        redisTemplate.opsForValue().set(userMoneyLog.getOrderId(), SHOP_PAY_STATUS_PAID.getCode());
     }
 
     /**

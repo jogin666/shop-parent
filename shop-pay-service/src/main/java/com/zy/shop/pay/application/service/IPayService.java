@@ -7,7 +7,7 @@ import com.zy.shop.pojo.ShopPay;
  * @author: jogin
  * @date: 2020/12/6 14:05
  */
-public interface IShopPayService {
+public interface IPayService {
 
     boolean createPayment(ShopPay tradePay) throws ShopBizException;
 

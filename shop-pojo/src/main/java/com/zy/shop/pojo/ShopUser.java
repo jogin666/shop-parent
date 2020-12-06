@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  */
 
 @Data
-public class ShopUSer implements Serializable {
+public class ShopUser implements Serializable {
 
     private Long userId;
 

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zy.shop.order.applicaton.mapper.ShopOrderMapper" >
+
+    <resultMap id="BaseResultMap" type="com.zy.shop.pojo.ShopOrder" >
+        <id column="order_id" property="orderId" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+
+        <result column="order_status" property="orderStatus" jdbcType="INTEGER" />
+        <result column="pay_status" property="payStatus" jdbcType="INTEGER" />
+        <result column="user_name" property="shippingStatus" jdbcType="INTEGER" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="consignee" property="consignee" jdbcType="VARCHAR" />
+        <result column="goods_id" property="goodsId" jdbcType="BIGINT" />
+        <result column="goods_number" property="goodsNumber" jdbcType="INTEGER" />
+        <result column="goods_price" property="goodsPrice" jdbcType="DECIMAL" />
+        <result column="goods_amount" property="goodsAmount" jdbcType="DECIMAL" />
+        <result column="shipping_fee" property="shippingFee" jdbcType="DECIMAL" />
+        <result column="order_amount" property="orderAmount" jdbcType="DECIMAL" />
+        <result column="coupon_id" property="couponId" jdbcType="BIGINT" />
+        <result column="coupon_paid" property="couponPaid" jdbcType="DECIMAL" />
+        <result column="money_paid" property="moneyPaid" jdbcType="DECIMAL" />
+        <result column="pay_amount" property="payAmount" jdbcType="DECIMAL" />
+        <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+        <result column="confirm_time" property="confirmTime" jdbcType="TIMESTAMP" />
+        <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <insert id="saveOrder" parameterType="com.zy.shop.pojo.ShopOrder">
+        insert into myshop.shop_order(user_id, user_name, telphone, goods_id, order_id, coupon_id, order_status, create_time, update_time, goods_number, total_money, address)
+        values()
+    </insert>
+
+    <update id="updateShopOrder" parameterType="com.zy.shop.pojo.ShopOrder">
+        update myshop.shop_order set order_status=#{status},update_time=now()
+    </update>
+</mapper>

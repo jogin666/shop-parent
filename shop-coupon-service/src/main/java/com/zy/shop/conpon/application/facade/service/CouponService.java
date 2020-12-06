@@ -80,7 +80,7 @@ public class CouponService implements ShopCouponService {
             tradeCoupon.setCreateTime(couponRequest.getCreateTime());
             log.info("更新优惠卷状态入参：{}", tradeCoupon);
             couponService.updateCouponStatus(tradeCoupon);
-            return BaseShopResponse.success(new ResultEntity(SHOP_COUPON_UPDATE_SUCCESS.getStatus(), SHOP_COUPON_UPDATE_SUCCESS.getDesc()));
+            return BaseShopResponse.success(new ResultEntity(SHOP_COUPON_UPDATE_SUCCESS.getCode(), SHOP_COUPON_UPDATE_SUCCESS.getDesc()));
         }catch (Exception e){
             log.error("更新商品优惠卷状态报错：{}",e.getMessage(),e);
             return BaseShopResponse.fail(SHOP_COUPON_UPDATE_FAIL.toString());

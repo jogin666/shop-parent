@@ -5,7 +5,7 @@ import com.zy.shop.common.exception.ShopBizException;
 import com.zy.shop.common.util.IDWorker;
 import com.zy.shop.pay.application.mapper.ShopMqProducerLogMapper;
 import com.zy.shop.pay.application.mapper.ShopPayMapper;
-import com.zy.shop.pay.application.service.IShopPayService;
+import com.zy.shop.pay.application.service.IPayService;
 import com.zy.shop.pojo.ShopMQProducerLog;
 import com.zy.shop.pojo.ShopPay;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,8 @@ import static com.zy.shop.common.enums.ShopPaidStatusEnum.*;
 
 @Slf4j
 @Service
-public class ShopPayServiceImpl implements IShopPayService {
+// TODO 幂等
+public class PayServiceImpl implements IPayService {
 
     @Autowired
     private ShopPayMapper shopPayMapper;
