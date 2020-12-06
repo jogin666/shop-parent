@@ -26,23 +26,29 @@ public class ShopOrder implements Serializable {
 
     private String userName;
 
+    private String goodsName;
+
+    private BigDecimal goodsPrice;
+
+    private Integer goodsNumber;
+
+    private BigDecimal couponMoney;
+
+    private BigDecimal paidMoney;
+
+    private BigDecimal payAmount;
+
+    private BigDecimal totalMoney;
+
+    private Integer orderStatus;
+
     private String telPhone;
 
-    private Integer status;
+    private String address;
 
     private Timestamp createTime;
 
     private Timestamp updateTime;
 
-    private Integer goodsNumber;
-
-    private BigDecimal goodsPrice;
-
-    private BigDecimal couponMoney;
-
-    private BigDecimal moneyPaid;
-
-    private BigDecimal totalMoney;
-
-    private String address;
+    private BigDecimal shippingFee;
 }

@@ -20,11 +20,9 @@ import com.zy.shop.facade.ShopUserService;
 import com.zy.shop.order.applicaton.mapper.ShopOrderMapper;
 import com.zy.shop.order.applicaton.service.IOrderService;
 import com.zy.shop.pojo.ShopOrder;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
-import org.omg.CORBA.DATA_CONVERSION;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -33,6 +31,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Random;
 
 import static com.zy.shop.common.enums.ShopCouponStatusEnum.*;
 import static com.zy.shop.common.enums.ShopGoodsStatusEnum.*;
@@ -82,10 +81,10 @@ public class OrderServiceImpl implements IOrderService {
             if (flag != null && CKECK_ORDER_OK.equals(flag)) {
                 throw new ShopBizException(SHOP_ORDER_STATUS_CONFIRM_FAIL.toString());
             }
-            if (flag != null && CKECK_ORDER_PRE_OK.equals(flag)){
+            if (flag != null && CKECK_ORDER_PRE_OK.equals(flag)) {
                 throw new ShopBizException(SHOP_ORDER_STATUS_CONFIRM_PROCESSING.toString());
             }
-            redisTemplate.opsForValue().setIfAbsent(order.getOrderId(),CKECK_ORDER_PRE_OK);
+            redisTemplate.opsForValue().setIfAbsent(order.getOrderId(), CKECK_ORDER_PRE_OK);
             // 保存订单
             savePreOrder(order);
             //扣减商品库存
@@ -97,7 +96,7 @@ public class OrderServiceImpl implements IOrderService {
             // 更新订单状态
             updateOrderStatus(order);
 
-            redisTemplate.opsForValue().setIfPresent(order.getOrderId(),CKECK_ORDER_PRE_OK);
+            redisTemplate.opsForValue().setIfPresent(order.getOrderId(), CKECK_ORDER_PRE_OK);
         } catch (Exception e) {
             return invokeException(order);
         }
@@ -106,7 +105,7 @@ public class OrderServiceImpl implements IOrderService {
 
     private void updateOrderStatus(ShopOrder order) throws ShopBizException {
         order.setUpdateTime(new Timestamp(new Date().getTime()));
-        order.setStatus(SHOP_ORDER_STATUS_CONFIRM.getCode());
+        order.setOrderStatus(SHOP_ORDER_STATUS_CONFIRM.getCode());
         int row = orderMapper.updateShopOrder(order);
         if (row < 0) {
             throw new ShopBizException(SHOP_ORDER_STATUS_NOT_FOUND.toString());
@@ -171,11 +170,11 @@ public class OrderServiceImpl implements IOrderService {
     private Long savePreOrder(ShopOrder order) throws ShopBizException {
         order.setOrderId(idWorker.nextId());
         // 核算订单运费
-        order.setStatus(SHOP_ORDER_STATUS_NO_CONFIRM.getCode());
-        // 判断用户是否使用余额
-        BigDecimal moneyPaid = order.getMoneyPaid();
+        order.setOrderStatus(SHOP_ORDER_STATUS_NO_CONFIRM.getCode());
+        // 判断用户是否使用账号余额
+        BigDecimal moneyPaid = order.getPaidMoney();
         if (moneyPaid != null) {
-            // 订单中用户使用的余额是否合法
+            // 订单中用户使用的账号的余额是否合法
             int result = moneyPaid.compareTo(BigDecimal.ZERO);
             // 余额小于 0
             if (result == -1) {
@@ -195,7 +194,7 @@ public class OrderServiceImpl implements IOrderService {
                 }
             }
         } else {
-            order.setMoneyPaid(BigDecimal.ZERO);
+            order.setPaidMoney(BigDecimal.ZERO);
         }
         // 判断用户是否使用优惠卷
         Long couponId = order.getCouponId();
@@ -218,9 +217,10 @@ public class OrderServiceImpl implements IOrderService {
             order.setCouponMoney(BigDecimal.ZERO);
         }
         // 核算订单支付金额    订单总金额-余额-优惠券金额
-        BigDecimal payAmount = order.getTotalMoney().subtract(order.getMoneyPaid()).subtract(order.getCouponMoney());
-        order.setTotalMoney(payAmount);
+        BigDecimal payAmount = order.getTotalMoney().subtract(order.getPaidMoney()).subtract(order.getCouponMoney());
+        order.setPayAmount(payAmount);
         order.setCreateTime(new Timestamp(new Date().getTime()));
+        order.setShippingFee(calculateShippingFee());
         orderMapper.saveOrder(order);
         log.info("用户订单使用优惠卷：{}", order.getCouponId());
         log.info("成功保存用户订单：{}", order.getOrderId());
@@ -230,14 +230,15 @@ public class OrderServiceImpl implements IOrderService {
     /**
      * 计算商品运费
      *
-     * @param orderAmount
      * @return
      */
-    private BigDecimal calculateShippingFee(BigDecimal orderAmount) {
-        if (orderAmount.compareTo(new BigDecimal(100)) == 0) {
-            return BigDecimal.ZERO;
+    private BigDecimal calculateShippingFee() {
+        Random random = new Random();
+        int shipping = random.nextInt(50);
+        if (shipping <= 5) {
+            shipping = 15;
         }
-        return new BigDecimal(100);
+        return new BigDecimal(shipping);
     }
 
     /**
@@ -266,7 +267,7 @@ public class OrderServiceImpl implements IOrderService {
      * @param order
      */
     private void reduceMoneyPaid(ShopOrder order) {
-        if (order.getStatus() != null && order.getTotalMoney().compareTo(BigDecimal.ZERO) == 1) {
+        if (order.getOrderStatus() != null && order.getTotalMoney().compareTo(BigDecimal.ZERO) == 1) {
             ShopUserUseMoneyLogRequest request = new ShopUserUseMoneyLogRequest();
             request.setOrderId(order.getOrderId());
             request.setUserId(order.getUserId());
