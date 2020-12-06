@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zy.shop.user.application.mapper.ShopUserUseMoneyLogMapper">
+
+    <resultMap id="ShopUserUseMoneyLogMap" type="com.zy.shop.pojo.ShopUserUseMoneyLog">
+        <id column="user_id" property="userId" jdbcType="BIGINT"/>
+        <id column="order_id" property="orderId" jdbcType="BIGINT"/>
+        <id column="type" property="type" jdbcType="INTEGER"/>
+        <result column="money" property="money" jdbcType="DECIMAL"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="countUserUseMoney" parameterType="com.zy.shop.pojo.ShopUserUseMoneyLog" resultType="Integer">
+        select COUNT(1)
+        from myshop.shop_user_use_money_log
+        where user_id = #{userId}
+          and order_id = #{orderId}
+          and type = #{type}
+    </select>
+
+    <insert id="saveUseMoneyLog" parameterType="com.zy.shop.pojo.ShopUserUseMoneyLog">
+        insert into myshop.shop_user_use_money_log(user_id, order_id, money, type, create_time, update_time)
+        VALUES(#{userId},#{orderId},#{money},#{type},now(),now())
+    </insert>
+
+    <select id="findUserUseMoneyLog" resultMap="ShopUserUseMoneyLogMap"
+            parameterType="com.zy.shop.pojo.ShopUserUseMoneyLog">
+        select COUNT(1)
+        from myshop.shop_user_use_money_log
+        where user_id = #{userId}
+          and order_id = #{orderId}
+          and type = #{type}
+    </select>
+
+</mapper>
