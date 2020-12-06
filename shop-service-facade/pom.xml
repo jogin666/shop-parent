@@ -9,7 +9,13 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>shop-facade</artifactId>
+    <artifactId>shop-service-facade</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.zy</groupId>
+            <artifactId>shop-common</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

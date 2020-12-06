@@ -21,18 +21,18 @@ public enum ShopOrderStatusEnum {
     SHOP_ORDER_STATUS_CONFIRM_PROCESSING( 608, "商品正在确认"),
     ;
 
-    private Integer status;
+    private Integer code;
     private String desc;
 
-    ShopOrderStatusEnum(Integer status, String desc) {
-        this.status = status;
+    ShopOrderStatusEnum(Integer code, String desc) {
+        this.code = code;
         this.desc = desc;
     }
 
     @Override
     public String toString() {
         return "{" +
-                "status=" + status +
+                "code=" + code +
                 ", desc='" + desc + '\'' +
                 '}';
     }

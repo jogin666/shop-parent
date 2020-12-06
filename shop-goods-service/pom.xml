@@ -12,4 +12,23 @@
     <artifactId>shop-goods-service</artifactId>
 
 
+    <dependencies>
+
+        <dependency>
+            <groupId>com.zy</groupId>
+            <artifactId>shop-service-facade</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.zy</groupId>
+            <artifactId>shop-pojo</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+    </dependencies>
+
+
 </project>

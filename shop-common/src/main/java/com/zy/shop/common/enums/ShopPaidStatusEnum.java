@@ -22,18 +22,18 @@ public enum ShopPaidStatusEnum {
     SHOP_PAY_STATUS_CANNOT_CREATE(711, "订单创建失败"),
     ;
 
-    private Integer status;
+    private Integer code;
     private String desc;
 
-    ShopPaidStatusEnum(Integer status, String desc) {
+    ShopPaidStatusEnum(Integer code, String desc) {
         this.desc = desc;
-        this.status = status;
+        this.code = code;
     }
 
     @Override
     public String toString() {
         return "{" +
-                "status=" + status +
+                "code=" + code +
                 ", desc='" + desc + '\'' +
                 '}';
     }

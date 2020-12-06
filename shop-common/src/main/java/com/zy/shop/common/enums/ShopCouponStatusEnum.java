@@ -18,18 +18,18 @@ public enum ShopCouponStatusEnum {
     SHOP_COUPON_UPDATE_SUCCESS(305, "优惠券状态更新成功"),
     SHOP_COUPON_UPDATE_FAIL(306, "优惠券状态更新失败"),
     ;
-    private Integer status;
+    private Integer code;
     private String desc;
 
-    ShopCouponStatusEnum(Integer status, String desc) {
-        this.status = status;
+    ShopCouponStatusEnum(Integer code, String desc) {
+        this.code = code;
         this.desc = desc;
     }
 
     @Override
     public String toString() {
         return "{" +
-                "status=" + status +
+                "code=" + code +
                 ", desc='" + desc + '\'' +
                 '}';
     }

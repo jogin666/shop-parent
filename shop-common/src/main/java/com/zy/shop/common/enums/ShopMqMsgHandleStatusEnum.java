@@ -15,18 +15,18 @@ public enum ShopMqMsgHandleStatusEnum {
     SHOP_MQ_MSG_STATUS_FAIL(203, "消息处理失败"),
     ;
 
-    private Integer status;
+    private Integer code;
     private String desc;
 
-    ShopMqMsgHandleStatusEnum(Integer status, String desc) {
-        this.status = status;
+    ShopMqMsgHandleStatusEnum(Integer code, String desc) {
+        this.code = code;
         this.desc = desc;
     }
 
     @Override
     public String toString() {
         return "{" +
-                "status=" + status +
+                "code=" + code +
                 ", desc='" + desc + '\'' +
                 '}';
     }

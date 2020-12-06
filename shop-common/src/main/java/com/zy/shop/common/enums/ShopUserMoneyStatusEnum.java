@@ -19,18 +19,18 @@ public enum ShopUserMoneyStatusEnum {
     SHOP_USER_MONEY_STATUS_UPDATING(806,"用户金额更新进行中"),
     ;
 
-    private Integer status;
+    private Integer code;
     private String desc;
 
-    ShopUserMoneyStatusEnum(Integer status, String desc) {
-        this.status = status;
+    ShopUserMoneyStatusEnum(Integer code, String desc) {
+        this.code = code;
         this.desc = desc;
     }
 
     @Override
     public String toString() {
         return "{" +
-                "status=" + status +
+                "code=" + code +
                 ", desc='" + desc + '\'' +
                 '}';
     }

@@ -28,4 +28,6 @@ public class ShopGoodsRequest implements Serializable {
     private Timestamp updateTime;
 
     private String goodsDesc;
+
+    private Long orderId;
 }
