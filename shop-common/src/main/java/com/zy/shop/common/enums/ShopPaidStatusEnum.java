@@ -20,6 +20,7 @@ public enum ShopPaidStatusEnum {
     SHOP_PAY_STATUS_ROLLBACK_FAIL2(709, "退款失败，订单未支付"),
     SHOP_PAY_STATUS_ERROR(710, "支付失败，订单状态时不是未支付"),
     SHOP_PAY_STATUS_CANNOT_CREATE(711, "订单创建失败"),
+    SHOP_PAY_STATUS_NOT_FOUND(712,"订单查询不到"),
     ;
 
     private Integer code;

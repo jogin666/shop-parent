@@ -26,6 +26,7 @@
         <module>shop-user-service</module>
         <module>shop-goods-service</module>
         <module>shop-pojo</module>
+        <module>shop-pay-service</module>
     </modules>
 
     <properties>

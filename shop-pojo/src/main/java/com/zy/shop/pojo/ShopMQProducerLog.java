@@ -16,6 +16,8 @@ public class ShopMQProducerLog implements Serializable {
 
     private String groupName;
 
+    private String msgTopic;
+
     private String msgKey;
 
     private String msgTag;

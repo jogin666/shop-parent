@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zy.shop.pay.application.mapper.ShopPayMapper">
+
+    <resultMap id="ShopPayMap" type="com.zy.shop.pojo.ShopPay">
+        <id column="pay_id" property="payId" jdbcType="BIGINT"/>
+        <result column="order_id" property="orderId" jdbcType="BIGINT"/>
+        <result column="pay_money" property="payMoney" jdbcType="DECIMAL"/>
+        <result column="pay_status" property="status" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="trade_serial" property="tradeSerial" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="findOneById" resultMap="ShopPayMap" parameterType="long">
+        select *
+        from myshop.shop_pay
+        where pay_id = #{payId}
+    </select>
+
+    <select id="countById" resultType="Integer" parameterType="long">
+        select COUNT(*)
+        from myshop.shop_pay
+        where pay_id = #{payId}
+    </select>
+
+    <insert id="saveShopPay" parameterType="com.zy.shop.pojo.ShopPay">
+        insert into myshop.shop_pay(pay_id, order_id, trade_serial, pay_money, pay_status, update_time, create_time)
+        VALUES(#{payId},#{orderId},#{tradeSerial},#{payMoney},#{status},now(),now())
+    </insert>
+
+
+</mapper>

@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: dubbo-pay-provider
+
+  # Dubbo
+  dubbo:
+    server: true
+    protocol:
+      name: dubbo
+      prot: 20884
+    application:
+      id: dubbo-pay-provider
+      name: dubbo-pay-provider
+    registry:
+      address: zookeeper://127.0.0.1:2181
+
+  # DataBase
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/trade?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: root
+
+# Mybatis properties
+mybatis:
+  type-aliases-package: com.zy.shop.pojo
+  mapper-locations: classpth:mapper/*Mapper.xml
+
+# RocketMQ
+rocketmq:
+  producer:
+    group: payProducerGrou
+  name-server: 127.0.0.1:9876
+mq:
+  topic: payTopic
+  pay:
+    tag: paid
