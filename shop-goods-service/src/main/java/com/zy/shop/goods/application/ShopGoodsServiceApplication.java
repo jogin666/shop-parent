@@ -1,4 +1,4 @@
-package com.zy.shop.goods.appllication;
+package com.zy.shop.goods.application;
 
 import com.alibaba.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.springframework.boot.SpringApplication;

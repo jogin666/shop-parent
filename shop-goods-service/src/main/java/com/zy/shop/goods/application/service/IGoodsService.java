@@ -1,8 +1,7 @@
-package com.zy.shop.goods.appllication.service;
+package com.zy.shop.goods.application.service;
 
 import com.zy.shop.common.exception.ShopBizException;
 import com.zy.shop.pojo.ShopGoods;
-import com.zy.shop.pojo.ShopMQConsumerLog;
 
 import java.util.Map;
 

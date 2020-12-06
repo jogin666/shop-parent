@@ -1,4 +1,4 @@
-package com.zy.shop.goods.appllication.configuration;
+package com.zy.shop.goods.application.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

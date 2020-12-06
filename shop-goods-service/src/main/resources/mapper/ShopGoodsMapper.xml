@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zy.shop.goods.application.mapper.ShopGoodsMapper" >
+
+
+    <resultMap id="shopGoodsMap" type="com.zy.shop.pojo.ShopGoods">
+        <id column="goods_id" property="goodsId" javaType="Long" jdbcType="BIGINT"></id>
+        <result column="goods_name" property="name" jdbcType="VARCHAR" />
+        <result column="goods_number" property="number" jdbcType="INTEGER" />
+        <result column="goods_price" property="goodsPrice" jdbcType="DECIMAL" />
+        <result column="goods_desc" property="goodsDesc" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <select id="findOneById" parameterType="long" resultMap="shopGoodsMap">
+        select * from myshop.shop_goods where goods_id = #{goodsId}
+    </select>
+
+    <update id="updateGoods" parameterType="com.zy.shop.pojo.ShopGoods">
+        update myshop.shop_goods set goods_number = #{number}
+    </update>
+</mapper>

@@ -1,4 +1,4 @@
-package com.zy.shop.goods.appllication.facade.service;
+package com.zy.shop.goods.application.facade.service;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.zy.shop.common.aspect.RequestLogger;
@@ -9,7 +9,7 @@ import com.zy.shop.common.dto.response.BaseShopResponse;
 import com.zy.shop.common.dto.response.ShopGoodsResponse;
 import com.zy.shop.common.util.ResultBuilder;
 import com.zy.shop.facade.ShopGoodsService;
-import com.zy.shop.goods.appllication.service.IGoodsService;
+import com.zy.shop.goods.application.service.IGoodsService;
 import com.zy.shop.pojo.ShopGoods;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

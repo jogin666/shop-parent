@@ -1,11 +1,11 @@
-package com.zy.shop.goods.appllication.mq;
+package com.zy.shop.goods.application.mq;
 
 /**
  * @author: jogin
  * @date: 2020/12/6 13:02
  */
 
-import com.zy.shop.goods.appllication.service.IGoodsService;
+import com.zy.shop.goods.application.service.IGoodsService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.spring.annotation.MessageModel;

@@ -1,4 +1,4 @@
-package com.zy.shop.goods.appllication.mapper;
+package com.zy.shop.goods.application.mapper;
 
 import com.zy.shop.pojo.ShopGoods;
 import org.apache.ibatis.annotations.Mapper;

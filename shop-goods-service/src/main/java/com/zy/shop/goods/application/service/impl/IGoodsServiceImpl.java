@@ -1,12 +1,12 @@
-package com.zy.shop.goods.appllication.service.impl;
+package com.zy.shop.goods.application.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.zy.shop.common.dto.mq.MQMessageEntity;
 import com.zy.shop.common.exception.ShopBizException;
 import com.zy.shop.common.util.RedisLock;
-import com.zy.shop.goods.appllication.mapper.ShopGoodsMapper;
-import com.zy.shop.goods.appllication.mapper.ShopMqConsumerLogMapper;
-import com.zy.shop.goods.appllication.service.IGoodsService;
+import com.zy.shop.goods.application.mapper.ShopGoodsMapper;
+import com.zy.shop.goods.application.mapper.ShopMqConsumerLogMapper;
+import com.zy.shop.goods.application.service.IGoodsService;
 import com.zy.shop.pojo.ShopGoods;
 import com.zy.shop.pojo.ShopMQConsumerLog;
 import lombok.extern.slf4j.Slf4j;
@@ -62,7 +62,7 @@ public class IGoodsServiceImpl implements IGoodsService {
      * @return 是否扣减成功
      */
     @Override
-    @Transactional //TODO sleep
+    @Transactional
     public boolean reduceGoodsNumber(ShopGoods shopGoods, Long orderId) throws ShopBizException {
 
         // 幂等
@@ -179,7 +179,7 @@ public class IGoodsServiceImpl implements IGoodsService {
         } else {
             mqConsumerLog.setStatus(SHOP_GOOD_STATUS_NUMBER_REDUCING.getCode());
             mqConsumerLog.setConsumeTime(mqConsumerLog.getConsumeTime() + 1);
-            mqConsumerLogMapper.saveMqConsumerLog(mqConsumerLog);
+            mqConsumerLogMapper.updateMqConsumerLog(mqConsumerLog);
         }
         log.info("消息：{} 消费失败，消费次数：{}，等待重试消费", msgContentMap.get("msgId"), mqConsumerLog.getConsumeTime());
         rollbackGoodNumber(msgContentMap);
