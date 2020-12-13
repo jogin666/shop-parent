@@ -51,7 +51,7 @@ public class RollBackCouponStatusListener implements RocketMQListener<MessageExt
                 }
                 // 3. 更改优惠卷状态
                 tradeCoupon.setUseTime(null);
-                tradeCoupon.setStatus(SHOP_COUPON_UNUSED.getStatus());
+                tradeCoupon.setStatus(SHOP_COUPON_UNUSED.getCode());
                 ICouponService.updateCouponStatus(tradeCoupon);
                 log.info("回滚优惠卷成功：{}", message.getCouponId());
             }

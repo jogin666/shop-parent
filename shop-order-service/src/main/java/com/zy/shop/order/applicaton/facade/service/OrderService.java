@@ -1,6 +1,5 @@
 package com.zy.shop.order.applicaton.facade.service;
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.zy.shop.common.dto.mq.ResultEntity;
 import com.zy.shop.common.dto.request.BaseShopRequest;
 import com.zy.shop.common.dto.request.ShopOrderRequest;
@@ -9,6 +8,7 @@ import com.zy.shop.facade.ShopOrderService;
 import com.zy.shop.order.applicaton.service.IOrderService;
 import com.zy.shop.pojo.ShopOrder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -60,10 +60,10 @@ public class OrderService implements ShopOrderService{
         order.setGoodsId(orderRequest.getGoodsId());
         order.setGoodsNumber(orderRequest.getGoodsNumber());
         order.setGoodsPrice(orderRequest.getGoodsPrice());
-        order.setMoneyPaid(orderRequest.getMoneyPaid());
+        order.setPaidMoney(orderRequest.getMoneyPaid());
         order.setTotalMoney(orderRequest.getTotalMoney());
         order.setOrderId(orderRequest.getOrderId());
-        order.setStatus(orderRequest.getStatus());
+        order.setOrderStatus(orderRequest.getStatus());
         order.setUserId(orderRequest.getUserId());
         return order;
     }

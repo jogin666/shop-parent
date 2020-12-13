@@ -1,18 +1,9 @@
+server:
+  port: 8088
+
 spring:
   application:
     name: dubbo-pay-provider
-
-  # Dubbo
-  dubbo:
-    server: true
-    protocol:
-      name: dubbo
-      prot: 20884
-    application:
-      id: dubbo-pay-provider
-      name: dubbo-pay-provider
-    registry:
-      address: zookeeper://127.0.0.1:2181
 
   # DataBase
   datasource:
@@ -20,6 +11,18 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/trade?useUnicode=true&characterEncoding=utf8
     username: root
     password: root
+
+# Dubbo
+dubbo:
+  server: true
+  protocol:
+    name: dubbo
+    prot: 20884
+  application:
+    id: dubbo-pay-provider
+    name: dubbo-pay-provider
+  registry:
+    address: zookeeper://127.0.0.1:2181
 
 # Mybatis properties
 mybatis:

@@ -1,6 +1,5 @@
 package com.zy.shop.pay.application.facade.service;
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.zy.shop.common.dto.mq.ResultEntity;
 import com.zy.shop.common.dto.request.BaseShopRequest;
 import com.zy.shop.common.dto.request.ShopPayRequest;
@@ -9,6 +8,7 @@ import com.zy.shop.facade.ShopPayService;
 import com.zy.shop.pay.application.service.IPayService;
 import com.zy.shop.pojo.ShopPay;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

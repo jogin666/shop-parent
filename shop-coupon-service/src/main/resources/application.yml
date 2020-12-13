@@ -1,18 +1,10 @@
 # application.properties
+server:
+  port: 8085
+
 spring:
   application:
     name:  dubbo-coupon-provider
-  # Dubbo
-  dubbo:
-    application:
-      id: dubbo-coupon-provider
-      name: dubbo-coupon-provider
-      register:
-        address: zookeeper://127.0.0.1:2181
-    server: true
-    protocol:
-      name: dubbo
-      port: 20881
 
   # database
   datasource:
@@ -21,11 +13,22 @@ spring:
     username: root
     password: root
 
+# Dubbo
+dubbo:
+  application:
+    id: dubbo-coupon-provider
+    name: dubbo-coupon-provider
+    register:
+      address: zookeeper://127.0.0.1:2181
+  server: true
+  protocol:
+    name: dubbo
+    port: 20881
+
 # Mybatis properties
 mybatis:
   type-aliases-package: com.zy.shop.pojo
   mapper-locations: classpth:mapper/*Mapper.xml
-
 
 # RocketMQ properties
 rocketmq:

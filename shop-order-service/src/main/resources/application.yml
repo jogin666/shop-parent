@@ -1,23 +1,27 @@
+server:
+  port: 8087
+
 spring:
   application:
     name: dubbo-order-provider
-  # Dubbo
-  dubbo:
-    application:
-      name: dubbo-order-provider
-      id: dubbo-order-provider
-    registry:
-      adress: zookeeper//127.0.0.1:2181
-    server: true
-    protocol:
-      name: dubbo
-      prot: 20883
   # DataBase
   datasource:
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/trade?useUnicode=true&characterEncoding=utf8
+
+# Dubbo
+dubbo:
+  application:
+    name: dubbo-order-provider
+    id: dubbo-order-provider
+  registry:
+    adress: zookeeper//127.0.0.1:2181
+  server: true
+  protocol:
+    name: dubbo
+    prot: 20883
 
 # Mybatis
 mybatis:
