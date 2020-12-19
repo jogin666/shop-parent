@@ -7,24 +7,24 @@ import com.zy.shop.common.dto.response.BaseShopResponse;
 import com.zy.shop.common.dto.response.ShopGoodsResponse;
 
 /**
- * @author: jogin
- * @date: 2020/12/5 16:45
+ * @Author: Jong
+ * @Date: 2020/12/5 16:45
  */
 public interface ShopGoodsService {
 
     /**
      * 根据 goodsId 查询 goods
      *
-     * @param request
-     * @return
+     * @param request 商品查询请求
+     * @return 商品信息
      */
     BaseShopResponse<ShopGoodsResponse> findOneById(BaseShopRequest<Long> request);
 
     /**
      * 扣减 goods 库存
      *
-     * @param request
-     * @return
+     * @param request 扣减库存请求
+     * @return 扣除库存结果
      */
     BaseShopResponse<ResultEntity> reduceGoodsNumber(BaseShopRequest<ShopGoodsRequest> request);
 }

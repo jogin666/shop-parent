@@ -6,16 +6,16 @@ import com.zy.shop.common.dto.request.ShopOrderRequest;
 import com.zy.shop.common.dto.response.BaseShopResponse;
 
 /**
- * @author: jogin
- * @date: 2020/12/5 16:45
+ * @Author: Jong
+ * @Date: 2020/12/5 16:45
  */
 public interface ShopOrderService {
 
     /**
      * 确定订单
      *
-     * @param request
-     * @return
+     * @param request 确定订单请求
+     * @return 确定订单结果
      */
     BaseShopResponse<ResultEntity> confirmOrder(BaseShopRequest<ShopOrderRequest> request);
 }
