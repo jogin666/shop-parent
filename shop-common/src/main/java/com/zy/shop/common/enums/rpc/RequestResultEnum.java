@@ -3,8 +3,8 @@ package com.zy.shop.common.enums.rpc;
 import lombok.Getter;
 
 /**
- * @author: jogin
- * @date: 2020/12/5 14:49
+ * @Author: Jong
+ * @Date: 2020/12/5 14:49
  */
 
 @Getter
@@ -17,8 +17,8 @@ public enum RequestResultEnum {
     REQUEST_RESULT_FAIL(104,"请求执行失败")
     ;
 
-    private Integer code;
-    private String des;
+    private final Integer code;
+    private final String des;
 
     RequestResultEnum(Integer code, String des) {
         this.code = code;

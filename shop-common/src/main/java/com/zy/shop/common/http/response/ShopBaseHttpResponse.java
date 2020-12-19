@@ -3,8 +3,8 @@ package com.zy.shop.common.http.response;
 import lombok.Getter;
 
 /**
- * @author: jogin
- * @date: 2020/12/5 15:19
+ * @Author: Jong
+ * @Date: 2020/12/5 15:19
  */
 @Getter
 public class ShopBaseHttpResponse<T> {

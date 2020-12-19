@@ -3,8 +3,8 @@ package com.zy.shop.common.enums;
 import lombok.Getter;
 
 /**
- * @author: jogin
- * @date: 2020/12/5 14:05
+ * @Author: Jong
+ * @Date: 2020/12/5 14:05
  */
 
 @Getter
@@ -23,8 +23,8 @@ public enum ShopPaidStatusEnum {
     SHOP_PAY_STATUS_NOT_FOUND(712,"订单查询不到"),
     ;
 
-    private Integer code;
-    private String desc;
+    private final Integer code;
+    private final String desc;
 
     ShopPaidStatusEnum(Integer code, String desc) {
         this.desc = desc;

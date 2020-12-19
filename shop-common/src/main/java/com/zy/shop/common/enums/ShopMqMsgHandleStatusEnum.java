@@ -3,8 +3,8 @@ package com.zy.shop.common.enums;
 import lombok.Getter;
 
 /**
- * @author: jogin
- * @date: 2020/12/5 14:16
+ * @Author: Jong
+ * @Date: 2020/12/5 14:16
  */
 
 @Getter
@@ -15,8 +15,8 @@ public enum ShopMqMsgHandleStatusEnum {
     SHOP_MQ_MSG_STATUS_FAIL(203, "消息处理失败"),
     ;
 
-    private Integer code;
-    private String desc;
+    private final Integer code;
+    private final String desc;
 
     ShopMqMsgHandleStatusEnum(Integer code, String desc) {
         this.code = code;

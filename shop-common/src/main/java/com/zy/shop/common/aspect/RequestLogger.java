@@ -3,8 +3,8 @@ package com.zy.shop.common.aspect;
 import java.lang.annotation.*;
 
 /**
- * @author: jogin
- * @date: 2020/12/5 14:56
+ * @Author: Jong
+ * @Date: 2020/12/5 14:56
  */
 
 @Documented

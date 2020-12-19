@@ -7,11 +7,10 @@ import org.springframework.data.redis.core.script.RedisScript;
 
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Lock;
 
 /**
- * @author: jogin
- * @date: 2020/12/5 14:57
+ * @Author: Jong
+ * @Date: 2020/12/5 14:57
  */
 @Slf4j
 public class RedisLock {
@@ -20,23 +19,25 @@ public class RedisLock {
     private final static Integer LOCK_TIME = 5;
     private final static Long SUCCESS = 1L;
 
-    public static boolean hasExecuted(RedisTemplate redisTemplate, String key, int value){
+    public static Boolean hasExecuted(RedisTemplate<Object,Object> redisTemplate, String key, int value){
         Integer redisValue = (Integer) redisTemplate.opsForValue().get(key);
-        if (redisValue.intValue() == value){
+        if (redisValue!=null && redisValue == value){
             return true;
         }
         redisTemplate.opsForValue().setIfAbsent(key,value);
         return false;
     }
 
-    // TODO
-    public static boolean lock(RedisTemplate redisTemplate, String key) {
+    // TODO 使用线程优化请求
+    @SuppressWarnings("unboxing")
+    public static Boolean lock(RedisTemplate<Object,Object> redisTemplate, String key) {
         int tries = 3;
-        boolean locked = false;
+        Boolean locked = false;
         if (key == null) {
-            log.info("redis 加锁失败，key:{} 不能为空！", key);
+            log.info("redis 加锁失败，key 不能为空！");
         }
         while (!locked && tries > 0) {
+            assert key != null;
             locked = redisTemplate.opsForValue().setIfAbsent(key, REDIS_LOCK_VALUE, LOCK_TIME, TimeUnit.SECONDS);
             tries--;
             try {
@@ -48,11 +49,12 @@ public class RedisLock {
         return locked;
     }
 
-    public static boolean unlock(RedisTemplate redisTemplate, String key) {
+    public static Boolean unlock(RedisTemplate<Object,Object> redisTemplate, String key) {
         if (key == null) {
-            log.info("redis 释放锁失败，key: {} 不能为空！");
+            log.info("redis 释放锁失败，key 不能为空！");
         }
-        boolean releaseLock = false;
+        Boolean releaseLock = false;
+        assert key != null;
         String value = (String) redisTemplate.opsForValue().get(key);
         if (key.equals(value)) {
             releaseLock = redisTemplate.delete(key);
@@ -60,16 +62,13 @@ public class RedisLock {
         return releaseLock;
     }
 
-    public static boolean unlockLua(RedisTemplate redisTemplate, String key){
+    public static Boolean unlockLua(RedisTemplate<Object,Object> redisTemplate, String key){
         if (key == null) {
-            log.info("redis 释放锁失败，key: {} 不能为空！");
+            log.info("redis 释放锁失败，key 不能为空！");
         }
         String luaScript = "if redis.call('get',KEYS[1]) == ARGV[1] then return redis('del',KEYS[1]) else return 0 end";
-        RedisScript<String> redisScript = new DefaultRedisScript<>(luaScript,String.class);
-        Object result = redisTemplate.execute(redisScript, Collections.singletonList(key), REDIS_LOCK_VALUE);
-        if (SUCCESS.equals(result)){
-            return true;
-        }
-        return false;
+        RedisScript<Long> redisScript = new DefaultRedisScript<>(luaScript,Long.class);
+        Long result = redisTemplate.execute(redisScript, Collections.singletonList(key), REDIS_LOCK_VALUE);
+        return SUCCESS.equals(result);
     }
 }

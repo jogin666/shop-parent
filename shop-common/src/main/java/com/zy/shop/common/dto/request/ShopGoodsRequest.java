@@ -5,11 +5,10 @@ import lombok.Data;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.Date;
 
 /**
- * @author: jogin
- * @date: 2020/12/5 14:56
+ * @Author: Jong
+ * @Date: 2020/12/5 14:56
  */
 
 @Data
@@ -25,7 +24,7 @@ public class ShopGoodsRequest implements Serializable {
 
     private Timestamp createTime;
 
-    private Timestamp updateTime;
+    private Timestamp upDateTime;
 
     private String goodsDesc;
 

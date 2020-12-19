@@ -3,8 +3,8 @@ package com.zy.shop.common.enums;
 import lombok.Getter;
 
 /**
- * @author: jogin
- * @date: 2020/12/5 14:35
+ * @Author: Jong
+ * @Date: 2020/12/5 14:35
  */
 @Getter
 public enum ShopGoodsStatusEnum {
@@ -17,8 +17,8 @@ public enum ShopGoodsStatusEnum {
     SHOP_GOOD_STATUS_PRICE_INVALID(104, "商品价格有误"),
     ;
 
-    private Integer code;
-    private String des;
+    private final Integer code;
+    private final String des;
 
     ShopGoodsStatusEnum(Integer code, String des) {
         this.code = code;

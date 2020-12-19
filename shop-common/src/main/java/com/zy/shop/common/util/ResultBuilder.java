@@ -1,8 +1,8 @@
 package com.zy.shop.common.util;
 
 /**
- * @author: jogin
- * @date: 2020/12/5 14:56
+ * @Author: Jong
+ * @Date: 2020/12/5 14:56
  */
 public class ResultBuilder {
 
@@ -10,10 +10,8 @@ public class ResultBuilder {
     private final static String CONDITION_EMPTY_SUFFIX = "为空！";
 
     public static String conditionEmpty(String condition) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(CONDITION_EMPTY_PREFIX)
-                .append(condition)
-                .append(CONDITION_EMPTY_PREFIX);
-        return builder.toString();
+        return CONDITION_EMPTY_PREFIX +
+                condition +
+                CONDITION_EMPTY_SUFFIX;
     }
 }

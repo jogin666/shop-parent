@@ -3,8 +3,8 @@ package com.zy.shop.common.enums;
 import lombok.Getter;
 
 /**
- * @author: jogin
- * @date: 2020/12/5 14:45
+ * @Author: Jong
+ * @Date: 2020/12/5 14:45
  */
 
 @Getter
@@ -19,8 +19,8 @@ public enum ShopUserMoneyStatusEnum {
     SHOP_USER_MONEY_STATUS_UPDATING(806,"用户金额更新进行中"),
     ;
 
-    private Integer code;
-    private String desc;
+    private final Integer code;
+    private final String desc;
 
     ShopUserMoneyStatusEnum(Integer code, String desc) {
         this.code = code;

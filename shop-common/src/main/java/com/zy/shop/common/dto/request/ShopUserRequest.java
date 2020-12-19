@@ -6,8 +6,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- * @author: jogin
- * @date: 2020/12/5 14:56
+ * @Author: Jong
+ * @Date: 2020/12/5 14:56
  */
 @Data
 public class ShopUserRequest implements Serializable {

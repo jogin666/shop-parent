@@ -3,8 +3,8 @@ package com.zy.shop.common.enums;
 import lombok.Getter;
 
 /**
- * @author: jogin
- * @date: 2020/12/5 14:39
+ * @Author: Jong
+ * @Date: 2020/12/5 14:39
  */
 
 @Getter
@@ -21,8 +21,8 @@ public enum ShopOrderStatusEnum {
     SHOP_ORDER_STATUS_CONFIRM_PROCESSING( 608, "商品正在确认"),
     ;
 
-    private Integer code;
-    private String desc;
+    private final Integer code;
+    private final String desc;
 
     ShopOrderStatusEnum(Integer code, String desc) {
         this.code = code;

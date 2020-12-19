@@ -5,8 +5,8 @@ import lombok.Getter;
 import java.io.Serializable;
 
 /**
- * @author: jogin
- * @date: 2020/12/5 14:59
+ * @Author: Jong
+ * @Date: 2020/12/5 14:59
  */
 
 @Getter
@@ -47,6 +47,6 @@ public class BaseShopResponse<T> implements Serializable {
     }
 
     public static <T> BaseShopResponse<T> fail(T data, String message) {
-        return new BaseShopResponse<>(FAILURE, null, message);
+        return new BaseShopResponse<>(FAILURE, data, message);
     }
 }
