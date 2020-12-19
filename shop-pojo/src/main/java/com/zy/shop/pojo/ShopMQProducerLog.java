@@ -6,8 +6,8 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
- * @author: jogin
- * @date: 2020/12/5 14:00
+ * @Author: Jong
+ * @Date: 2020/12/5 14:00
  */
 @Data
 public class ShopMQProducerLog implements Serializable {
@@ -28,5 +28,5 @@ public class ShopMQProducerLog implements Serializable {
 
     private Timestamp createTime;
 
-    private Timestamp updateTime;
+    private Timestamp upDateTime;
 }

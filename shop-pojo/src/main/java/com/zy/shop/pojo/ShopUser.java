@@ -6,8 +6,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- * @author: jogin
- * @date: 2020/12/5 13:47
+ * @Author: Jong
+ * @Date: 2020/12/5 13:47
  */
 
 @Data

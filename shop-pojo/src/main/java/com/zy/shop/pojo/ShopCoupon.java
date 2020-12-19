@@ -7,8 +7,8 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 /**
- * @author: jogin
- * @date: 2020/12/5 13:50
+ * @Author: Jong
+ * @Date: 2020/12/5 13:50
  */
 
 @Data
@@ -26,5 +26,5 @@ public class ShopCoupon implements Serializable {
 
     private Timestamp useTime;
 
-    private Timestamp updateTime;
+    private Timestamp upDateTime;
 }

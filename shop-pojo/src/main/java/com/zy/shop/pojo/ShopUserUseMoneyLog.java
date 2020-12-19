@@ -6,8 +6,8 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 /**
- * @author: jogin
- * @date: 2020/12/5 15:06
+ * @Author: Jong
+ * @Date: 2020/12/5 15:06
  */
 
 @Data
@@ -23,5 +23,5 @@ public class ShopUserUseMoneyLog {
 
     private Timestamp createTime;
 
-    private Timestamp updateTime;
+    private Timestamp upDateTime;
 }
