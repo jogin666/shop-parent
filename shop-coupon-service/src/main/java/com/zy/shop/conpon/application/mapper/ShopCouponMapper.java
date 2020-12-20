@@ -5,8 +5,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 /**
- * @author: jogin
- * @date: 2020/12/5 15:52
+ * @Author: Jong
+ * @Date: 2020/12/5 15:52
  */
 @Mapper
 public interface ShopCouponMapper {

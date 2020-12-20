@@ -18,9 +18,8 @@ dubbo:
   application:
     id: dubbo-coupon-provider
     name: dubbo-coupon-provider
-    register:
-      address: zookeeper://127.0.0.1:2181
-  server: true
+  registry:
+    address: zookeeper://127.0.0.1:2181
   protocol:
     name: dubbo
     port: 20881
@@ -33,12 +32,10 @@ mybatis:
 # RocketMQ properties
 rocketmq:
   name-server: 127.0.0.1:9876
-  producer:
-    group: orderProducerGroup
 
 mq:
   order:
-    consumer:
-      group:
-        name: order_orderTopic_cancel_group
-    topic: orderTopic
+    cancel:
+      consumer:
+        group: SHOP_ORDER_CANCEL_CONSUMER_GROUP
+      topic: SHOP_ORDER_CANCEL_TOPIC

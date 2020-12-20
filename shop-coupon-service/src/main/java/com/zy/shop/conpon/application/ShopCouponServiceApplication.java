@@ -5,8 +5,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * @author: jogin
- * @date: 2020/12/5 15:31
+ * @Author: Jong
+ * @Date: 2020/12/5 15:31
  */
 
 @SpringBootApplication

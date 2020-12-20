@@ -16,13 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import static com.zy.shop.common.enums.ShopCouponStatusEnum.SHOP_COUPON_UPDATE_FAIL;
-import static com.zy.shop.common.enums.ShopCouponStatusEnum.SHOP_COUPON_UPDATE_SUCCESS;
+import java.util.Objects;
+
+import static com.zy.shop.common.enums.ShopCouponStatusEnum.*;
 import static com.zy.shop.common.enums.rpc.RequestResultEnum.REQUEST_PARAM_EMPTY;
 
 /**
- * @author: jogin
- * @date: 2020/12/5 16:13
+ * @Author: Jong
+ * @Date: 2020/12/5 16:13
  */
 @Slf4j
 @Component
@@ -44,7 +45,7 @@ public class CouponService implements ShopCouponService {
             return BaseShopResponse.fail(message);
         }
         ShopCouponResponse response = null;
-        log.info("商品优惠卷查询：{}",couponId);
+        log.info("商品优惠卷查询：{}", couponId);
         ShopCoupon tradeCoupon = couponService.findOneById(couponId);
         if (tradeCoupon != null) {
             response = ShopCouponResponse.builder()
@@ -62,15 +63,15 @@ public class CouponService implements ShopCouponService {
     @Override
     @RequestLogger(description = "更新商品优惠卷状态")
     public BaseShopResponse<ResultEntity> updateCouponStatus(BaseShopRequest<ShopCouponRequest> request) {
-        if (request == null && request.getData() == null) {
+        if (Objects.requireNonNull(request).getData() != null) {
             return BaseShopResponse.fail(REQUEST_PARAM_EMPTY.toString());
         }
         Long couponId = request.getData().getCouponId();
-        if (StringUtils.isEmpty(couponId)) {
+        if (StringUtils.hasLength(String.valueOf(couponId))) {
             String message = ResultBuilder.conditionEmpty("couponId");
             return BaseShopResponse.fail(message);
         }
-        try{
+        try {
             ShopCouponRequest couponRequest = request.getData();
             ShopCoupon tradeCoupon = new ShopCoupon();
             tradeCoupon.setCouponId(couponId);
@@ -81,8 +82,8 @@ public class CouponService implements ShopCouponService {
             log.info("更新优惠卷状态入参：{}", tradeCoupon);
             couponService.updateCouponStatus(tradeCoupon);
             return BaseShopResponse.success(new ResultEntity(SHOP_COUPON_UPDATE_SUCCESS.getCode(), SHOP_COUPON_UPDATE_SUCCESS.getDesc()));
-        }catch (Exception e){
-            log.error("更新商品优惠卷状态报错：{}",e.getMessage(),e);
+        } catch (Exception e) {
+            log.error("更新商品优惠卷状态报错：{}", e.getMessage(), e);
             return BaseShopResponse.fail(SHOP_COUPON_UPDATE_FAIL.toString());
         }
     }
