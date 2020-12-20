@@ -20,8 +20,8 @@ import static com.zy.shop.common.enums.rpc.RequestResultEnum.*;
 import static com.zy.shop.common.enums.rpc.RequestResultEnum.REQUEST_RESULT_SUCCESS;
 
 /**
- * @author: jogin
- * @date: 2020/12/6 13:04
+ * @Author: Jong
+ * @Date: 2020/12/6 13:04
  */
 @Slf4j
 @Component
@@ -34,11 +34,11 @@ public class GoodsService implements ShopGoodsService {
     @Override
     @RequestLogger(description = "查询商品 - by Id")
     public BaseShopResponse<ShopGoodsResponse> findOneById(BaseShopRequest<Long> request) {
-        if (request == null || StringUtils.isEmpty(request.getData())) {
+        if (request == null || StringUtils.hasLength(String.valueOf(request.getData()))) {
             return BaseShopResponse.fail(REQUEST_PARAM_EMPTY.toString());
         }
         Long goodsId = request.getData();
-        if (StringUtils.isEmpty(String.valueOf(goodsId))) {
+        if (StringUtils.hasLength(String.valueOf(goodsId))) {
             String message = ResultBuilder.conditionEmpty("goodsId");
             return BaseShopResponse.fail(message);
         }
@@ -63,12 +63,11 @@ public class GoodsService implements ShopGoodsService {
     @Override
     @RequestLogger(description = "执行扣减商品库存")
     public BaseShopResponse<ResultEntity> reduceGoodsNumber(BaseShopRequest<ShopGoodsRequest> request) {
-        if (request == null || StringUtils.isEmpty(request.getData())) {
+        if (request == null || StringUtils.hasLength(String.valueOf(request.getData().getGoodsId()))) {
             return BaseShopResponse.fail(REQUEST_PARAM_EMPTY.toString());
         }
         ShopGoodsRequest data = request.getData();
-        if (data.getNumber() == null || data.getGoodsId() == null
-                || data.getNumber() == null || data.getNumber().intValue() < 0) {
+        if (data.getNumber() == null || data.getGoodsId() == null || data.getNumber() < 0) {
             log.info("执行扣减商品库存,请求参数有误：{}", request);
             return BaseShopResponse.fail(REQUEST_PARAM_ERROR.toString());
         }

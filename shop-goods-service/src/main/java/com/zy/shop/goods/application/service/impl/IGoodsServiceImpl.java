@@ -1,7 +1,8 @@
 package com.zy.shop.goods.application.service.impl;
 
-import com.alibaba.fastjson.JSON;
+import com.zy.shop.common.enums.ShopGoodsStatusEnum;
 import com.zy.shop.common.dto.mq.MQMessageEntity;
+import com.zy.shop.common.enums.ShopMqMsgHandleStatusEnum;
 import com.zy.shop.common.exception.ShopBizException;
 import com.zy.shop.common.util.RedisLock;
 import com.zy.shop.goods.application.mapper.ShopGoodsMapper;
@@ -9,6 +10,7 @@ import com.zy.shop.goods.application.mapper.ShopMqConsumerLogMapper;
 import com.zy.shop.goods.application.service.IGoodsService;
 import com.zy.shop.pojo.ShopGoods;
 import com.zy.shop.pojo.ShopMQConsumerLog;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,12 +23,9 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Map;
 
-import static com.zy.shop.common.enums.ShopGoodsStatusEnum.*;
-import static com.zy.shop.common.enums.ShopMqMsgHandleStatusEnum.SHOP_MQ_MSG_STATUS_SUCCESS;
-
 /**
- * @author: jogin
- * @date: 2020/12/5 18:59
+ * @Author: Jong
+ * @Date: 2020/12/5 18:59
  */
 
 @Slf4j
@@ -38,7 +37,7 @@ public class IGoodsServiceImpl implements IGoodsService {
     @Autowired
     private ShopMqConsumerLogMapper mqConsumerLogMapper;
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<Object,Object> redisTemplate;
     @Autowired
     @Qualifier("poolTaskExecutor")
     private ThreadPoolTaskExecutor poolTaskExecutor;
@@ -63,36 +62,37 @@ public class IGoodsServiceImpl implements IGoodsService {
      */
     @Override
     @Transactional
+    @SuppressWarnings("boxing")
     public boolean reduceGoodsNumber(ShopGoods shopGoods, Long orderId) throws ShopBizException {
 
         // 幂等
         Integer state = (Integer) redisTemplate.opsForValue().get(shopGoods.getGoodsId());
-        if (state != null && SHOP_GOOD_STATUS_NUMBER_REDUCING.getCode().intValue() == state.intValue()) {
+        if (state != null && ShopGoodsStatusEnum.SHOP_GOOD_STATUS_NUMBER_REDUCING.getCode().intValue() == state.intValue()) {
             poolTaskExecutor.execute(() -> {
                 int reties = 3;
                 boolean result = false;
                 try {
                     while (reties > 0 && !result) {
-                        result = redisTemplate.opsForValue().setIfAbsent(orderId, SHOP_GOOD_STATUS_NUMBER_REDUCING.getCode());
+                        result = redisTemplate.opsForValue().setIfAbsent(orderId, ShopGoodsStatusEnum.SHOP_GOOD_STATUS_NUMBER_REDUCING.getCode());
                         reties--;
                         if (!result) {
                             Thread.sleep(200);
                         }
                     }
                 } catch (InterruptedException e) {
-                    log.error("商品扣减库存执行幂等线程被中断：{}", e);
+                    log.error("商品扣减库存执行幂等线程被中断：{}", e.getMessage(),e);
                 }
             });
         }
 
         ShopGoods goods = goodsMapper.findOneById(shopGoods.getGoodsId());
         if (goods == null) {
-            log.info("查询不到商品：{}", goods.getGoodsId());
-            throw new ShopBizException(SHOP_GOODS_STATUS_NOT_FOUND.toString());
+            log.info("查询不到商品：{}", shopGoods.getGoodsId());
+            throw new ShopBizException(ShopGoodsStatusEnum.SHOP_GOODS_STATUS_NOT_FOUND.toString());
         }
         if (goods.getNumber() - shopGoods.getNumber() < 0) {
             log.info("商品库存不足：{}", goods.getNumber());
-            throw new ShopBizException(SHOP_GOODS_STATUS_NUMBER_INSUFFICIENT.toString());
+            throw new ShopBizException(ShopGoodsStatusEnum.SHOP_GOODS_STATUS_NUMBER_INSUFFICIENT.toString());
         }
         try {
             // 加锁，扣减商品库存
@@ -127,10 +127,11 @@ public class IGoodsServiceImpl implements IGoodsService {
             goods.setNumber(goods.getNumber() + message.getGoodNumber());
             goodsMapper.updateGoods(goods);
 
-            consumerLog.setStatus(SHOP_MQ_MSG_STATUS_SUCCESS.getCode());
+            consumerLog.setStatus(ShopMqMsgHandleStatusEnum.SHOP_MQ_MSG_STATUS_SUCCESS.getCode());
             consumerLog.setUpdateTime(new Timestamp(new Date().getTime()));
             mqConsumerLogMapper.updateMqConsumerLog(consumerLog);
             log.info("商品：{} 数量回滚成功", message.getGoodNumber());
+            return true;
         } catch (Exception e) {
             log.warn("回滚商品：{} 数量出现异常：{}", goodsId, e.getMessage());
             invokeException(msgContentMap);
@@ -141,15 +142,15 @@ public class IGoodsServiceImpl implements IGoodsService {
     private boolean canConsumeMessage(ShopMQConsumerLog mqConsumerLog, Map<String, String> msgContentMap) {
         if (mqConsumerLog != null) {
             Integer status = mqConsumerLog.getStatus();
-            if (SHOP_MQ_MSG_STATUS_SUCCESS.getCode().intValue() == status.intValue()) {
+            if (ShopMqMsgHandleStatusEnum.SHOP_MQ_MSG_STATUS_SUCCESS.getCode().intValue() == status.intValue()) {
                 log.info("消息：{} 已经消费成功", msgContentMap.get("msgId"));
                 return false;
             }
-            if (SHOP_GOOD_STATUS_NUMBER_REDUCING.getCode().intValue() == status.intValue()) {
+            if (ShopGoodsStatusEnum.SHOP_GOOD_STATUS_NUMBER_REDUCING.getCode().intValue() == status.intValue()) {
                 log.info("消息：{} 正在消费中", msgContentMap.get("msgId"));
                 return false;
             }
-            if (SHOP_GOOD_STATUS_REDUCE_FAIL.getCode().intValue() == status.intValue()) {
+            if (ShopGoodsStatusEnum.SHOP_GOOD_STATUS_REDUCE_FAIL.getCode().intValue() == status.intValue()) {
                 if (mqConsumerLog.getConsumeTime() > 3) {
                     log.info("消息：{} 消息处理超过3次,不能再进行处理", msgContentMap.get("msgId"));
                     return false;
@@ -166,23 +167,24 @@ public class IGoodsServiceImpl implements IGoodsService {
             log.info("开始消费消息：{}", msgContentMap.get("msgId"));
         } else {
             consumerLog.setConsumeTime(consumerLog.getConsumeTime() + 1);
-            consumerLog.setStatus(SHOP_GOOD_STATUS_NUMBER_REDUCING.getCode());
+            consumerLog.setStatus(ShopGoodsStatusEnum.SHOP_GOOD_STATUS_NUMBER_REDUCING.getCode());
             mqConsumerLogMapper.saveMqConsumerLog(consumerLog);
             log.info("消息开始第 [{}] 重试消费", consumerLog.getConsumeTime() + 1);
         }
     }
 
     private void invokeException(Map<String, String> msgContentMap) {
+        int consumeTime = 1;
         ShopMQConsumerLog mqConsumerLog = mqConsumerLogMapper.findOneByMsgKey(msgContentMap.get("msgKey"));
         if (mqConsumerLog == null) {
             saveMqConsumerLog(msgContentMap, 1);
         } else {
-            mqConsumerLog.setStatus(SHOP_GOOD_STATUS_NUMBER_REDUCING.getCode());
-            mqConsumerLog.setConsumeTime(mqConsumerLog.getConsumeTime() + 1);
+            consumeTime = mqConsumerLog.getConsumeTime() + 1;
+            mqConsumerLog.setStatus(ShopGoodsStatusEnum.SHOP_GOOD_STATUS_NUMBER_REDUCING.getCode());
+            mqConsumerLog.setConsumeTime(consumeTime);
             mqConsumerLogMapper.updateMqConsumerLog(mqConsumerLog);
         }
-        log.info("消息：{} 消费失败，消费次数：{}，等待重试消费", msgContentMap.get("msgId"), mqConsumerLog.getConsumeTime());
-        rollbackGoodNumber(msgContentMap);
+        log.info("消息：{} 消费失败，消费次数：{}，等待重试消费", msgContentMap.get("msgId"), consumeTime);
     }
 
     private void saveMqConsumerLog(Map<String, String> msgContentMap, int times) {
@@ -193,7 +195,7 @@ public class IGoodsServiceImpl implements IGoodsService {
         mqConsumerLog.setMsgBody(msgContentMap.get("msgBody"));
         mqConsumerLog.setConsumeTime(times);
         mqConsumerLog.setMsgId(Long.parseLong(msgContentMap.get("msgId")));
-        mqConsumerLog.setStatus(SHOP_GOOD_STATUS_NUMBER_REDUCING.getCode());
+        mqConsumerLog.setStatus(ShopGoodsStatusEnum.SHOP_GOOD_STATUS_NUMBER_REDUCING.getCode());
         mqConsumerLogMapper.saveMqConsumerLog(mqConsumerLog);
     }
 }

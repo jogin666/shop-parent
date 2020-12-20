@@ -6,8 +6,8 @@ import com.zy.shop.pojo.ShopGoods;
 import java.util.Map;
 
 /**
- * @author: jogin
- * @date: 2020/12/5 18:53
+ * @Author: Jong
+ * @Date: 2020/12/5 18:53
  */
 public interface IGoodsService {
 
@@ -15,5 +15,6 @@ public interface IGoodsService {
 
     boolean reduceGoodsNumber(ShopGoods goods,Long orderId) throws ShopBizException;
 
+    @SuppressWarnings("unused")
     boolean rollbackGoodNumber(Map<String,String> msgContentMap);
 }

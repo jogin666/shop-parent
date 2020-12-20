@@ -14,14 +14,14 @@ spring:
 # Dubbo
 dubbo:
   application:
-    name: dubbo-goods-provider
+    name: dubbo-goods-providerD
     id: dubbo-goods-provider
   registry:
-    adress: zookeeper//127.0.0.1:2181
-  server: true
+    address: zookeeper://127.0.0.1:2181
   protocol:
     name: dubbo
-    prot: 20882
+    port: 20882
+
 
 # Mybatis
 mybatis:
@@ -31,12 +31,10 @@ mybatis:
 #RocketMQ
 rocketmq:
   name-server: 127.0.0.1:9876
-  producer:
-    group: orderProducerGroup
 
 mq:
   order:
-    consumer:
-      group:
-        name: order_orderTopic_cancel_group
-    topic: orderTopic
+    cancel:
+      consumer:
+        group: SHOP_ORDER_CANCEL_CONSUMER_GROUP
+      topic: SHOP_ORDER_CANCEL_TOPIC
