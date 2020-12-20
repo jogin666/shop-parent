@@ -28,8 +28,8 @@ import static com.zy.shop.common.enums.ShopMqMsgHandleStatusEnum.SHOP_MQ_MSG_STA
 import static com.zy.shop.common.enums.ShopPaidStatusEnum.*;
 
 /**
- * @author: jogin
- * @date: 2020/12/6 14:06
+ * @Author: Jong
+ * @Date: 2020/12/6 14:06
  */
 
 @Slf4j
@@ -47,13 +47,13 @@ public class PayServiceImpl implements IPayService {
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<Object,Object> redisTemplate;
     @Autowired
     private IDWorker idWorker;
 
     @Value("${rocketmq.producer.group}")
     private String groupName;
-    @Value("${mq.topic}")
+    @Value("${mq.pay.topic}")
     private String topic;
     @Value("${mq.pay.tag}")
     private String tag;
@@ -113,7 +113,7 @@ public class PayServiceImpl implements IPayService {
      *
      * @param shopPay 支付订单实体类
      */
-    private void sendMqMessage(ShopPay shopPay) throws ShopBizException{
+    private void sendMqMessage(ShopPay shopPay) {
         ShopMQProducerLog mqProducerLog = new ShopMQProducerLog();
         mqProducerLog.setMsgId(idWorker.nextId());
         mqProducerLog.setGroupName(groupName);
@@ -139,7 +139,7 @@ public class PayServiceImpl implements IPayService {
     }
 
     /**
-     * 发送 mq 消息
+     * 发送支付成功 mq 消息
      *
      * @param message mq 消息
      * @return 是否发送成功

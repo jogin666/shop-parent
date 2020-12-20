@@ -16,8 +16,8 @@ import static com.zy.shop.common.enums.ShopPaidStatusEnum.SHOP_PAY_STATUS_CANNOT
 import static com.zy.shop.common.enums.rpc.RequestResultEnum.*;
 
 /**
- * @author: jogin
- * @date: 2020/12/6 16:03
+ * @Author: Jong
+ * @Date: 2020/12/6 16:03
  */
 
 @Slf4j

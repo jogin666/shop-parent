@@ -14,10 +14,9 @@ spring:
 
 # Dubbo
 dubbo:
-  server: true
   protocol:
     name: dubbo
-    prot: 20884
+    port: 20884
   application:
     id: dubbo-pay-provider
     name: dubbo-pay-provider
@@ -32,9 +31,9 @@ mybatis:
 # RocketMQ
 rocketmq:
   producer:
-    group: payProducerGrou
+    group:  SHOP_ORDER_PAID_PRODUCER_GROUP
   name-server: 127.0.0.1:9876
 mq:
-  topic: payTopic
   pay:
-    tag: paid
+    topic: SHOP_ORDER_PAID_TOPIC
+    tag: SHOP_ORDER_PAID_TAG

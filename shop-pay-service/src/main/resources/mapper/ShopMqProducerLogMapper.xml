@@ -17,6 +17,7 @@
         update myshop.shop_mq_producer_log
         set msg_status=#{status},
             update_time=now()
+        where msg_id = #{msgId}
     </update>
 
     <insert id="saveProducerLog" parameterType="com.zy.shop.pojo.ShopMQProducerLog">

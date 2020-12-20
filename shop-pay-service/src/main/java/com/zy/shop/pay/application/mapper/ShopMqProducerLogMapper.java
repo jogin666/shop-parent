@@ -4,8 +4,8 @@ import com.zy.shop.pojo.ShopMQProducerLog;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * @author: jogin
- * @date: 2020/12/6 14:02
+ * @Author: Jong
+ * @Date: 2020/12/6 14:02
  */
 @Mapper
 public interface ShopMqProducerLogMapper {

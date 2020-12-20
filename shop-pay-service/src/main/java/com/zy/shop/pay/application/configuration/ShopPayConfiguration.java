@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 /**
- * @author: jogin
- * @date: 2020/12/6 14:23
+ * @Author: Jong
+ * @Date: 2020/12/6 14:23
  */
 
 @Configuration

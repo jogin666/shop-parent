@@ -4,8 +4,8 @@ import com.zy.shop.pojo.ShopPay;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * @author: jogin
- * @date: 2020/12/6 14:00
+ * @Author: Jong
+ * @Date: 2020/12/6 14:00
  */
 @Mapper
 public interface ShopPayMapper {
