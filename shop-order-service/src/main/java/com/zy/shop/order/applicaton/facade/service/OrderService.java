@@ -16,8 +16,8 @@ import static com.zy.shop.common.enums.rpc.RequestResultEnum.*;
 import static com.zy.shop.common.enums.rpc.RequestResultEnum.REQUEST_RESULT_FAIL;
 
 /**
- * @author: jogin
- * @date: 2020/12/6 16:13
+ * @Author: Jong
+ * @Date: 2020/12/6 16:13
  */
 @Slf4j
 @Component
@@ -40,7 +40,7 @@ public class OrderService implements ShopOrderService{
             return BaseShopResponse.fail(REQUEST_PARAM_ERROR.toString());
         }
         try {
-            boolean result = orderService.saveOrder(newOrderTrade(data));
+            boolean result = orderService.confirmOrder(newOrderTrade(data));
             if (result){
                 return BaseShopResponse.success(new ResultEntity(REQUEST_RESULT_SUCCESS.getCode(),REQUEST_RESULT_SUCCESS.getDes()));
             }

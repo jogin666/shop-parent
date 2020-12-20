@@ -5,8 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author: jogin
- * @date: 2020/12/6 16:50
+ * @Author: Jong
+ * @Date: 2020/12/6 16:50
  */
 
 @Configuration

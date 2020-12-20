@@ -4,8 +4,8 @@ import com.zy.shop.pojo.ShopOrder;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * @author: jogin
- * @date: 2020/12/6 16:13
+ * @Author: Jong
+ * @Date: 2020/12/6 16:13
  */
 
 @Mapper

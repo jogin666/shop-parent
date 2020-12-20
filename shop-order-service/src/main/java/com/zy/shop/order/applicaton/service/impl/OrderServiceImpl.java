@@ -1,6 +1,5 @@
 package com.zy.shop.order.applicaton.service.impl;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
 import com.zy.shop.common.dto.mq.MQMessageEntity;
 import com.zy.shop.common.dto.mq.ResultEntity;
@@ -21,6 +20,7 @@ import com.zy.shop.order.applicaton.mapper.ShopOrderMapper;
 import com.zy.shop.order.applicaton.service.IOrderService;
 import com.zy.shop.pojo.ShopOrder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.Reference;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Random;
 
 import static com.zy.shop.common.enums.ShopCouponStatusEnum.*;
@@ -41,8 +42,8 @@ import static com.zy.shop.common.enums.ShopUserStatusEnum.*;
 import static com.zy.shop.common.enums.rpc.RequestResultEnum.REQUEST_RESULT_SUCCESS;
 
 /**
- * @author: jogin
- * @date: 2020/12/6 16:16
+ * @Author: Jong
+ * @Date: 2020/12/6 16:16
  */
 
 @Slf4j
@@ -50,7 +51,7 @@ import static com.zy.shop.common.enums.rpc.RequestResultEnum.REQUEST_RESULT_SUCC
 public class OrderServiceImpl implements IOrderService {
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<Object, Object> redisTemplate;
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
     @Autowired
@@ -68,23 +69,23 @@ public class OrderServiceImpl implements IOrderService {
     @Autowired
     private IDWorker idWorker;
 
-    private final String CKECK_ORDER_OK = "OK";
-    private final String CKECK_ORDER_PRE_OK = "PRE_OK";
+    private final String CHECK_ORDER_OK = "OK";
+    private final String CHECK_ORDER_PRE_OK = "PRE_OK";
 
 
     @Override
-    public boolean confirmOrder(ShopOrder order) throws ShopBizException {
+    public Boolean confirmOrder(ShopOrder order) throws ShopBizException {
         // 检查订单
         checkOrder(order);
         try {
             String flag = (String) redisTemplate.opsForValue().get(order.getOrderId());
-            if (flag != null && CKECK_ORDER_OK.equals(flag)) {
+            if (CHECK_ORDER_OK.equals(flag)) {
                 throw new ShopBizException(SHOP_ORDER_STATUS_CONFIRM_FAIL.toString());
             }
-            if (flag != null && CKECK_ORDER_PRE_OK.equals(flag)) {
+            if (CHECK_ORDER_PRE_OK.equals(flag)) {
                 throw new ShopBizException(SHOP_ORDER_STATUS_CONFIRM_PROCESSING.toString());
             }
-            redisTemplate.opsForValue().setIfAbsent(order.getOrderId(), CKECK_ORDER_PRE_OK);
+            redisTemplate.opsForValue().setIfAbsent(order.getOrderId(), CHECK_ORDER_PRE_OK);
             // 保存订单
             savePreOrder(order);
             //扣减商品库存
@@ -96,11 +97,28 @@ public class OrderServiceImpl implements IOrderService {
             // 更新订单状态
             updateOrderStatus(order);
 
-            redisTemplate.opsForValue().setIfPresent(order.getOrderId(), CKECK_ORDER_PRE_OK);
+            redisTemplate.opsForValue().setIfPresent(order.getOrderId(), CHECK_ORDER_PRE_OK);
         } catch (Exception e) {
             return invokeException(order);
         }
         return true;
+    }
+
+    @Override
+    public Boolean saveOrder(ShopOrder order) throws ShopBizException {
+        ShopOrder shopOrder = (ShopOrder) redisTemplate.opsForValue().get(order.getOrderId());
+        if (shopOrder != null) {
+            throw new ShopBizException(SHOP_ORDER_STATUS_NOT_FOUND.toString());
+        }
+        int row = orderMapper.saveOrder(order);
+        redisTemplate.opsForValue().setIfAbsent(order.getOrderId(), order);
+        log.info("订单：{} 保存成功", order.getOrderId());
+        return row > 0;
+    }
+
+    @Override
+    public Boolean cancelOrder(ShopOrder shopOrder) {
+        return orderMapper.updateShopOrder(shopOrder) > 0;
     }
 
     private void updateOrderStatus(ShopOrder order) throws ShopBizException {
@@ -113,37 +131,26 @@ public class OrderServiceImpl implements IOrderService {
         log.info("成功更新订单：{} 状态为确认状态", order.getOrderId());
     }
 
-    @Override
-    public boolean saveOrder(ShopOrder order) throws ShopBizException {
-        ShopOrder shopOrder = (ShopOrder) redisTemplate.opsForValue().get(order.getOrderId());
-        if (shopOrder != null) {
-            throw new ShopBizException(SHOP_ORDER_STATUS_NOT_FOUND.toString());
-        }
-        int row = orderMapper.saveOrder(order);
-        redisTemplate.opsForValue().setIfAbsent(order.getOrderId(), order);
-        log.info("订单：{} 保存成功", order.getOrderId());
-        return row > 0;
-    }
-
     /**
      * 检查订单
      *
-     * @param order
+     * @param order 商品订单
+     * @throws ShopBizException 商品业务操作异常
      */
     private void checkOrder(ShopOrder order) throws ShopBizException {
         //1.校验订单是否存在
         if (order == null) {
-            log.info("校验订单：{} 失败，订单不存在", order.getOrderId());
+            log.warn("校验订单失败，订单不存在");
             throw new ShopBizException(SHOP_ORDER_STATUS_NOT_FOUND.toString());
         }
         //2.校验订单中的商品是否存在
-        BaseShopResponse<ShopGoodsResponse> baseShopGoodsResponse = goodsService.findOneById(new BaseShopRequest<Long>(order.getGoodsId(), null));
+        BaseShopResponse<ShopGoodsResponse> baseShopGoodsResponse = goodsService.findOneById(new BaseShopRequest<>(order.getGoodsId(), null));
         if (baseShopGoodsResponse == null || baseShopGoodsResponse.getData() == null) {
             log.info("校验订单：{} 失败，商品：{} 不存在", order.getOrderId(), order.getGoodsId());
             throw new ShopBizException(SHOP_GOODS_STATUS_NOT_FOUND.toString());
         }
         //3.校验下单用户是否存在
-        BaseShopResponse<ShopUserResponse> baseShopUserResponse = userService.findOneById(new BaseShopRequest<Long>(order.getUserId(), null));
+        BaseShopResponse<ShopUserResponse> baseShopUserResponse = userService.findOneById(new BaseShopRequest<>(order.getUserId(), null));
         if (baseShopUserResponse == null || baseShopUserResponse.getData() == null) {
             log.info("校验订单：{} 失败，用户：{} 不存在", order.getOrderId(), order.getUserId());
             throw new ShopBizException(SHOP_USER_STATUS_NO_EXIST.toString());
@@ -164,8 +171,8 @@ public class OrderServiceImpl implements IOrderService {
     /**
      * 保存订单
      *
-     * @param order
-     * @return
+     * @param order 商品订单
+     * @return 商品订单Id
      */
     private Long savePreOrder(ShopOrder order) throws ShopBizException {
         order.setOrderId(idWorker.nextId());
@@ -199,20 +206,20 @@ public class OrderServiceImpl implements IOrderService {
         // 判断用户是否使用优惠卷
         Long couponId = order.getCouponId();
         if (couponId != null) {
-            BaseShopRequest<Long> request = new BaseShopRequest<Long>();
+            BaseShopRequest<Long> request = new BaseShopRequest<>();
             request.setData(order.getCouponId());
             BaseShopResponse<ShopCouponResponse> response = couponService.findOneById(request);
-            if (response == null || response.getData() != null) {
+            if (response == null || response.getData() == null) {
                 log.warn("无法生成用户订单，用户订单使用的优惠卷查询不到：{} ", order.getCouponId());
                 throw new ShopBizException(SHOP_COUPON_NO_EXIST.toString());
             }
-            if (response != null && response.getData() != null) {
+            if (Objects.requireNonNull(response).getData() != null) {
                 if (SHOP_COUPON_USED.getCode().intValue() == response.getData().getStatus()) {
                     log.warn("无法生成用户订单，用户订单使用的优惠卷查询已被使用过：{} ", order.getCouponId());
                     throw new ShopBizException(SHOP_COUPON_USED.toString());
                 }
+                order.setCouponMoney(response.getData().getCouponMoney());
             }
-            order.setCouponMoney(response.getData().getCouponMoney());
         } else {
             order.setCouponMoney(BigDecimal.ZERO);
         }
@@ -230,7 +237,7 @@ public class OrderServiceImpl implements IOrderService {
     /**
      * 计算商品运费
      *
-     * @return
+     * @return 返回商品运费
      */
     private BigDecimal calculateShippingFee() {
         Random random = new Random();
@@ -244,15 +251,15 @@ public class OrderServiceImpl implements IOrderService {
     /**
      * 扣减库存
      *
-     * @param order
+     * @param order 商品订单
      */
     private boolean reduceGoodsNum(ShopOrder order) {
         ShopGoodsRequest data = new ShopGoodsRequest();
         data.setGoodsId(order.getGoodsId());
         data.setOrderId(order.getOrderId());
         data.setNumber(order.getGoodsNumber());
-        BaseShopResponse<ResultEntity> response = goodsService.reduceGoodsNumber(new BaseShopRequest<ShopGoodsRequest>(data, null));
-        if (response != null && response.getData() != null
+        BaseShopResponse<ResultEntity> response = goodsService.reduceGoodsNumber(new BaseShopRequest<>(data, null));
+        if (Objects.requireNonNull(response).getData() != null
                 && response.getData().getCode().intValue() == REQUEST_RESULT_SUCCESS.getCode().intValue()) {
             log.info("订单：{} 扣减库存成功", order.getOrderId());
             return true;
@@ -264,7 +271,7 @@ public class OrderServiceImpl implements IOrderService {
     /**
      * 使用用户余额
      *
-     * @param order
+     * @param order 商品订单
      */
     private void reduceMoneyPaid(ShopOrder order) {
         if (order.getOrderStatus() != null && order.getTotalMoney().compareTo(BigDecimal.ZERO) == 1) {
@@ -273,10 +280,10 @@ public class OrderServiceImpl implements IOrderService {
             request.setUserId(order.getUserId());
             request.setMoney(order.getTotalMoney());
             request.setType(SHOP_PAY_STATUS_UNPAID.getCode());
-            BaseShopRequest baseShopRequest = new BaseShopRequest();
+            BaseShopRequest<ShopUserUseMoneyLogRequest> baseShopRequest = new BaseShopRequest<>();
             baseShopRequest.setData(request);
             BaseShopResponse<ResultEntity> response = userService.updateMoneyPaid(baseShopRequest);
-            if (response != null || response.getData() != null) {
+            if (Objects.requireNonNull(response).getData() != null) {
                 if (response.getData().getCode().intValue() == REQUEST_RESULT_SUCCESS.getCode().intValue()) {
                     log.info("用户订单:{} 扣减用户余额：{} 成功", order.getOrderId(), order.getTotalMoney());
                 }
@@ -287,13 +294,14 @@ public class OrderServiceImpl implements IOrderService {
     /**
      * 更新商品优惠卷状态
      *
-     * @param order
+     * @param order 商品订单
+     * @throws ShopBizException 商品业务操作异常
      */
     private void updateCouponStatus(ShopOrder order) throws ShopBizException {
         if (order.getCouponId() == null) {
             return;
         }
-        BaseShopRequest<Long> request = new BaseShopRequest();
+        BaseShopRequest<Long> request = new BaseShopRequest<>();
         request.setData(order.getCouponId());
         BaseShopResponse<ShopCouponResponse> response = couponService.findOneById(request);
         if (response == null || response.getData() == null) {
@@ -331,7 +339,7 @@ public class OrderServiceImpl implements IOrderService {
             Message message = new Message(topic, tag, String.valueOf(order.getOrderId()), body.getBytes());
             rocketMQTemplate.getProducer().send(message);
         } catch (Exception e) {
-            log.error("发送回滚确定订单的 MQ 消息事变", e.getMessage(), e);
+            log.error("发送回滚确定订单的 MQ 消息事变：{}", e.getMessage(), e);
             return false;
         }
         return true;

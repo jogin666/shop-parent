@@ -4,12 +4,14 @@ import com.zy.shop.common.exception.ShopBizException;
 import com.zy.shop.pojo.ShopOrder;
 
 /**
- * @author: jogin
- * @date: 2020/12/6 16:16
+ * @Author: Jong
+ * @Date: 2020/12/6 16:16
  */
 public interface IOrderService {
 
-    boolean saveOrder(ShopOrder order) throws ShopBizException;
+    Boolean saveOrder(ShopOrder order) throws ShopBizException;
 
-    boolean confirmOrder(ShopOrder order) throws ShopBizException;
+    Boolean confirmOrder(ShopOrder order) throws ShopBizException;
+
+    Boolean cancelOrder(ShopOrder shopOrder) throws ShopBizException;
 }
