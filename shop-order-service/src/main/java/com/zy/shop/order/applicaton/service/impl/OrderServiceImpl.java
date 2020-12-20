@@ -56,9 +56,9 @@ public class OrderServiceImpl implements IOrderService {
     private RocketMQTemplate rocketMQTemplate;
     @Autowired
     private ShopOrderMapper orderMapper;
-    @Value("${mq.order.topic}")
+    @Value("${mq.order.cancel.topic}")
     private String topic;
-    @Value("${mq.order.tag.cancel}")
+    @Value("${mq.order.cancel.tag}")
     private String tag;
     @Reference
     private ShopGoodsService goodsService;

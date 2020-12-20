@@ -5,7 +5,6 @@ server:
 spring:
   application:
     name:  dubbo-coupon-provider
-
   # database
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

@@ -10,6 +10,10 @@ spring:
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/trade?useUnicode=true&characterEncoding=utf8
+  # redis
+  redis:
+    database: 0
+    url: 127.0.0.1:6379
 
 # Dubbo
 dubbo:
@@ -35,11 +39,11 @@ rocketmq:
 
 mq:
   order:
-    consumer:
-      group:
-        name: SHOP_PAID_ROLLBACK_ORDER_CONSUMER_GROUP
-    topic: SHOP_PAID_ROLLBACK_TOPIC
-    tag: SHOP_ORDER_CANCEL_TAG
+    cancel:
+      consumer:
+        group: SHOP_ORDER_CANCEL_CONSUMER_GROUP
+      topic: SHOP_ORDER_CANCEL_TOPIC
+      tag: SHOP_ORDER_CANCEL_TAG
   pay:
     topic: SHOP_ORDER_PAID_TOPIC
     tag: SHOP_ORDER_PAID_TAG

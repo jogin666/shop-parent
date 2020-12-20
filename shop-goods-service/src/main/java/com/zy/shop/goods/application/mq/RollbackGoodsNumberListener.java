@@ -27,7 +27,7 @@ public class RollbackGoodsNumberListener implements RocketMQListener<MessageExt>
 
     @Autowired
     private IGoodsService goodsService;
-    @Value("${mq.order.consumer.group.name}")
+    @Value("${mq.order.cancel.consumer.group}")
     private String groupName;
 
     /**

@@ -4,13 +4,16 @@ server:
 spring:
   application:
     name: dubbo-pay-provider
-
   # DataBase
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/trade?useUnicode=true&characterEncoding=utf8
     username: root
     password: root
+  # redis
+  redis:
+    database: 0
+    url: 127.0.0.1:6379
 
 # Dubbo
 dubbo:
@@ -33,6 +36,7 @@ rocketmq:
   producer:
     group:  SHOP_ORDER_PAID_PRODUCER_GROUP
   name-server: 127.0.0.1:9876
+
 mq:
   pay:
     topic: SHOP_ORDER_PAID_TOPIC

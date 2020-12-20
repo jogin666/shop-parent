@@ -1,5 +1,6 @@
 server:
   port: 8089
+
 spring:
   application:
     name: dubbo-user-provider
@@ -9,6 +10,10 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/trade?useUnicode=true&characterEncoding=utf8
     username: user
     password: root
+  #redis
+  redis:
+    database: 0
+    url: 127.0.0.1:6379
 
 # Dubbo
 dubbo:

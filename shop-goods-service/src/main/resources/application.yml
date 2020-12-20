@@ -10,18 +10,20 @@ spring:
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/trade?useUnicode=true&characterEncoding=utf8
+  redis:
+    database: 0
+    url: 127.0.0.1:6379
 
 # Dubbo
 dubbo:
   application:
-    name: dubbo-goods-providerD
+    name: dubbo-goods-provider
     id: dubbo-goods-provider
   registry:
     address: zookeeper://127.0.0.1:2181
   protocol:
     name: dubbo
     port: 20882
-
 
 # Mybatis
 mybatis:
