@@ -26,5 +26,5 @@ public class ShopCouponRequest implements Serializable {
 
     private Timestamp useTime;
 
-    private Timestamp upDateTime;
+    private Timestamp updateTime;
 }

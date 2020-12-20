@@ -26,5 +26,5 @@ public interface ShopCouponService {
      * @param request 更新优惠卷状态
      * @return 更新优惠卷状态结果
      */
-    BaseShopResponse<ResultEntity> upDateCouponStatus(BaseShopRequest<ShopCouponRequest> request);
+    BaseShopResponse<ResultEntity> updateCouponStatus(BaseShopRequest<ShopCouponRequest> request);
 }

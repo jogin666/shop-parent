@@ -22,5 +22,5 @@ public class ShopUserUseMoneyLogRequest {
 
     private Timestamp createTime;
 
-    private Timestamp upDateTime;
+    private Timestamp updateTime;
 }

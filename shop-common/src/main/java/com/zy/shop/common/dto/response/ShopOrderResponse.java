@@ -30,7 +30,7 @@ public class ShopOrderResponse implements Serializable {
 
     private Timestamp createTime;
 
-    private Timestamp upDateTime;
+    private Timestamp updateTime;
 
     private Integer goodsNumber;
 

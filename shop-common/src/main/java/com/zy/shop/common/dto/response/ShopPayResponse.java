@@ -26,5 +26,5 @@ public class ShopPayResponse implements Serializable {
 
     private Timestamp createTime;
 
-    private Timestamp upDateTime;
+    private Timestamp updateTime;
 }

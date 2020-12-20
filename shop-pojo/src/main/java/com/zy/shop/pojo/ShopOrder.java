@@ -48,7 +48,7 @@ public class ShopOrder implements Serializable {
 
     private Timestamp createTime;
 
-    private Timestamp upDateTime;
+    private Timestamp updateTime;
 
     private BigDecimal shippingFee;
 }

@@ -26,5 +26,5 @@ public class ShopPayRequest implements Serializable {
 
     private Timestamp createTime;
 
-    private Timestamp upDateTime;
+    private Timestamp updateTime;
 }

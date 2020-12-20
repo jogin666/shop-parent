@@ -25,5 +25,5 @@ public class ShopPay implements Serializable {
 
     private Timestamp createTime;
 
-    private Timestamp upDateTime;
+    private Timestamp updateTime;
 }

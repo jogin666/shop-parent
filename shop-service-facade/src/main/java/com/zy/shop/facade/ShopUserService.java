@@ -27,5 +27,5 @@ public interface ShopUserService {
      * @param request  更新用户使用金额的状态请求
      * @return 结果
      */
-    BaseShopResponse<ResultEntity> upDateMoneyPaid(BaseShopRequest<ShopUserUseMoneyLogRequest> request);
+    BaseShopResponse<ResultEntity> updateMoneyPaid(BaseShopRequest<ShopUserUseMoneyLogRequest> request);
 }

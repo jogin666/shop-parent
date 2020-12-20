@@ -26,7 +26,7 @@ public class ShopMQConsumerLog implements Serializable {
 
     private Timestamp createTime;
 
-    private Timestamp upDateTime;
+    private Timestamp updateTime;
 
     private Integer consumeTime;
 

@@ -99,7 +99,7 @@ CREATE TABLE `trade_mq_producer_temp` (
   `msg_key` varchar(100) DEFAULT NULL,
   `msg_body` varchar(500) DEFAULT NULL,
   `msg_status` int(1) DEFAULT NULL COMMENT '0:未处理;1:已经处理',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON update CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

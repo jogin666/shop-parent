@@ -26,7 +26,7 @@ public class ShopGoodsResponse implements Serializable{
 
     private Timestamp createTime;
 
-    private Timestamp upDateTime;
+    private Timestamp updateTime;
 
     private String goodsDesc;
 }

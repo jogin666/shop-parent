@@ -28,5 +28,5 @@ public class ShopMQProducerLog implements Serializable {
 
     private Timestamp createTime;
 
-    private Timestamp upDateTime;
+    private Timestamp updateTime;
 }
