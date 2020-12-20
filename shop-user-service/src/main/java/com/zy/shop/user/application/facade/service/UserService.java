@@ -23,8 +23,8 @@ import static com.zy.shop.common.enums.rpc.RequestResultEnum.*;
 import static com.zy.shop.common.enums.rpc.RequestResultEnum.REQUEST_RESULT_SUCCESS;
 
 /**
- * @author: jogin
- * @date: 2020/12/6 15:28
+ * @Author: Jong
+ * @Date: 2020/12/6 15:28
  */
 @Slf4j
 @Component
@@ -36,7 +36,7 @@ public class UserService implements ShopUserService {
 
     @Override
     public BaseShopResponse<ShopUserResponse> findOneById(BaseShopRequest<Long> request) {
-        if (request == null || StringUtils.isEmpty(request.getData())) {
+        if (request == null || StringUtils.hasLength(String.valueOf(request.getData()))) {
             return BaseShopResponse.fail(REQUEST_PARAM_EMPTY.toString());
         }
         Long goodsId = request.getData();

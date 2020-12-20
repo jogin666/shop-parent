@@ -6,8 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
 /**
- * @author: jogin
- * @date: 2020/12/6 14:54
+ * @Author: Jong
+ * @Date: 2020/12/6 14:54
  */
 @Mapper
 public interface ShopUserUseMoneyLogMapper {
@@ -17,5 +17,7 @@ public interface ShopUserUseMoneyLogMapper {
     int saveUseMoneyLog(ShopUserUseMoneyLog useMoneyLog);
 
     List<ShopUserUseMoneyLog> findUserUseMoneyLog(ShopUserUseMoneyLog useMoneyLog);
+
+    int updateUseMoneyLogStatus(ShopUserUseMoneyLog userUseMoneyLog);
 
 }

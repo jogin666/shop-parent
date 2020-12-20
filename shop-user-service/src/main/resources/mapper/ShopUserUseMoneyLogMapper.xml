@@ -21,7 +21,7 @@
 
     <insert id="saveUseMoneyLog" parameterType="com.zy.shop.pojo.ShopUserUseMoneyLog">
         insert into myshop.shop_user_use_money_log(user_id, order_id, money, type, create_time, update_time)
-        VALUES(#{userId},#{orderId},#{money},#{type},now(),now())
+        VALUES (#{userId}, #{orderId}, #{money}, #{type}, now(), now())
     </insert>
 
     <select id="findUserUseMoneyLog" resultMap="ShopUserUseMoneyLogMap"
@@ -32,5 +32,12 @@
           and order_id = #{orderId}
           and type = #{type}
     </select>
+
+    <update id="updateUseMoneyLogStatus" parameterType="com.zy.shop.pojo.ShopUserUseMoneyLog">
+        update myshop.shop_user_use_money_log
+        set type=#{type},
+            update_time=#{updateTime}
+        where user_id = #{userId}
+    </update>
 
 </mapper>

@@ -21,6 +21,7 @@
 
     <update id="updateUserMoney" parameterType="com.zy.shop.pojo.ShopUser">
         update myshop.shop_user
-        set money=#{money};
+        set money=#{money}
+        where user_id = #{userId}
     </update>
 </mapper>

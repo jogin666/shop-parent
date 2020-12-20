@@ -10,17 +10,16 @@ spring:
     username: user
     password: root
 
-  # Dubbo
+# Dubbo
 dubbo:
   application:
     id: dubbo-user-provider
     name: dubbo-user-provider
   protocol:
     name: dubbo
-    prot: 20885
+    port: 20885
   registry:
     address: zookeeper://127.0.0.1:2181
-  server: true
 
 # Mybatis properties
 mybatis:
@@ -34,7 +33,7 @@ rocketmq:
   name-server: 127.0.0.1:9876
 mq:
   order:
-    topic: orderTopic
-    consumer:
-      group:
-        name: order_orderTopic_cancel_group
+    cancel:
+      consumer:
+        group: SHOP_ORDER_CANCEL_CONSUMER_GROUP
+      topic: SHOP_ORDER_CANCEL_TOPIC

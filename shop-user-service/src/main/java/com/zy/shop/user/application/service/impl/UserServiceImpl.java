@@ -17,15 +17,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static com.zy.shop.common.enums.ShopPaidStatusEnum.*;
 import static com.zy.shop.common.enums.ShopUserMoneyStatusEnum.*;
 
 /**
- * @author: jogin
- * @date: 2020/12/6 15:03
+ * @Author: Jong
+ * @Date: 2020/12/6 15:03
  */
 @Slf4j
 @Service
@@ -36,9 +35,7 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     private ShopUserUseMoneyLogMapper userMoneyLogMapper;
     @Autowired
-    private RedisTemplate redisTemplate;
-
-    private final int expireTime = 5;
+    private RedisTemplate<Object, Object> redisTemplate;
 
     /**
      * 查询用户
@@ -52,6 +49,22 @@ public class UserServiceImpl implements IUserService {
     }
 
     /**
+     * 更新用户金额
+     *
+     * @param shopUser     用户信息
+     * @param userMoneyLog 用户支付记录
+     * @return 是否成功
+     */
+    @Override
+    @Transactional
+    public Boolean updateUserMoney(ShopUser shopUser, ShopUserUseMoneyLog userMoneyLog) {
+        if (userMoneyLog != null) {
+            userMoneyLogMapper.updateUseMoneyLogStatus(userMoneyLog);
+        }
+        return userMapper.updateUserMoney(shopUser) > 0;
+    }
+
+    /**
      * 更新用户余额
      *
      * @param userMoneyLog 用户金额使用记录
@@ -60,6 +73,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional
     public boolean updateMoneyPaid(ShopUserUseMoneyLog userMoneyLog) throws ShopBizException {
+        final int expireTime = 5;
         // 幂等
         Integer state = (Integer) redisTemplate.opsForValue().get(userMoneyLog.getOrderId());
         if (state != null) {
@@ -70,7 +84,7 @@ public class UserServiceImpl implements IUserService {
                 }
             }
         }
-        try{
+        try {
             redisTemplate.opsForValue().set(userMoneyLog.getOrderId(), SHOP_USER_MONEY_STATUS_UPDATING.getCode(), expireTime, TimeUnit.MINUTES);
             // 加锁
             RedisLock.lock(redisTemplate, String.valueOf(userMoneyLog.getOrderId()));
@@ -88,9 +102,9 @@ public class UserServiceImpl implements IUserService {
             }
             // 解锁
             RedisLock.unlockLua(redisTemplate, String.valueOf(userMoneyLog.getOrderId()));
-        }catch (Exception e){
-            log.error("用户金额更新失败：{}",e.getMessage(),e);
-            throw new ShopBizException("用户金额更新出错",e);
+        } catch (Exception e) {
+            log.error("用户金额更新失败：{}", e.getMessage(), e);
+            throw new ShopBizException("用户金额更新出错", e);
         }
         return true;
     }
@@ -98,8 +112,8 @@ public class UserServiceImpl implements IUserService {
     /**
      * 扣减用户的金额
      *
-     * @param userMoneyLog
-     * @param shopUser
+     * @param userMoneyLog 用户金额使用记录
+     * @param shopUser     用户信息
      */
     private void reduceUserMoney(ShopUserUseMoneyLog userMoneyLog, ShopUser shopUser) throws ShopBizException {
 
@@ -109,8 +123,7 @@ public class UserServiceImpl implements IUserService {
         }
         BigDecimal money = shopUser.getMoney().subtract(userMoneyLog.getMoney());
         shopUser.setMoney(money);
-        userMapper.updateUserMoney(shopUser);
-        // 记录当订单操作
+        this.updateUserMoney(shopUser, null);
         userMoneyLog.setCreateTime(new Timestamp(new Date().getTime()));
         userMoneyLogMapper.saveUseMoneyLog(userMoneyLog);
         redisTemplate.opsForValue().set(userMoneyLog.getOrderId(), SHOP_PAY_STATUS_PAID.getCode());
@@ -119,8 +132,8 @@ public class UserServiceImpl implements IUserService {
     /**
      * 回滚用户使用的金额
      *
-     * @param userMoneyLog
-     * @param shopUser
+     * @param userMoneyLog 用户支付记录
+     * @param shopUser     用户信息
      */
     private void rollbackUsedMoney(ShopUserUseMoneyLog userMoneyLog, ShopUser shopUser) throws ShopBizException {
 
